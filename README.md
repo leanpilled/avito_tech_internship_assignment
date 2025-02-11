@@ -1,0 +1,1 @@
+# avito_tech_internship_assignment
