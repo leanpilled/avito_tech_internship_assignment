@@ -19,7 +19,10 @@ class ItemRepo:
             ItemModel.type == item_type
         )
 
-        result = (await self.session.execute(query)).mappings().all()
+        result = (await self.session.execute(query)).scalar_one_or_none()
+
+        if not result:
+            return None
 
         return ItemDto.model_validate(
             result,

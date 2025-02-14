@@ -1,4 +1,5 @@
 from logging.config import fileConfig
+from operator import imod
 
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
@@ -9,6 +10,10 @@ from settings import settings
 
 from data.db.connection.session import Base
 
+from data.db.models.deal import DealModel
+from data.db.models.item import ItemModel
+from data.db.models.transaction import TransactionModel
+from data.db.models.user import UserModel
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

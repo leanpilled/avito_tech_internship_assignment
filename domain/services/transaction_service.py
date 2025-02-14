@@ -24,10 +24,10 @@ class TransactionService:
     async def conduct_transaction(
         self,
         from_user_id: uuid.UUID,
-        to_user: str,
+        to_user_login: str,
         amount: int
     ) -> None:
-        to_user = await self.user_repo.get_user(to_user)
+        to_user = await self.user_repo.get_user(to_user_login)
         if not to_user:
             raise UserDoesntExists
 

@@ -23,7 +23,7 @@ async def send_coin(
     try:
         await transaction_service.conduct_transaction(
             from_user_id=user_id,
-            to_user=send_coin_request.to_user,
+            to_user_login=send_coin_request.to_user,
             amount=send_coin_request.amount,
         )
     except InsufficientFunds:
@@ -32,4 +32,4 @@ async def send_coin(
             content=ErrorResponse(
                 errors="Недостаточно средств"
             )
-        )   
+        )

@@ -36,7 +36,7 @@ class TransactionRepo:
     ) -> list[ReceivedCoin | None]:
         query = select(
             TransactionModel.amount,
-            UserModel.login,
+            UserModel.username,
         ).join(
             UserModel,
             UserModel.id == TransactionModel.user_from_id,
@@ -51,7 +51,7 @@ class TransactionRepo:
         for row in result:
             incoming_transactions.append(
                 ReceivedCoin(
-                    from_user=row.login,
+                    from_user=row.username,
                     amount=row.amount,
                 )
             )
@@ -64,7 +64,7 @@ class TransactionRepo:
     ) -> list[SendCoin | None]:
         query = select(
             TransactionModel.amount,
-            UserModel.login,
+            UserModel.username,
         ).join(
             UserModel,
             UserModel.id == TransactionModel.user_to_id,
@@ -79,7 +79,7 @@ class TransactionRepo:
         for row in result:
             outgoing_transactions.append(
                 SendCoin(
-                    to_user=row.login,
+                    to_user=row.username,
                     amount=row.amount,
                 )
             )

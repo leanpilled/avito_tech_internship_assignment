@@ -18,6 +18,7 @@ class UserRepo:
         user_model = UserModel(
             username=username,
             password=password,
+            balance=1000,
         )
         self.session.add(user_model)
         await self.session.commit()
