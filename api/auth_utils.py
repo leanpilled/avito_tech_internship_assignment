@@ -1,9 +1,11 @@
 import jwt
 import uuid
 from jwt.exceptions import InvalidTokenError
-from fastapi import HTTPException, Depends
+from fastapi import HTTPException, Depends, status
+from fastapi.responses import JSONResponse
 from fastapi.security import APIKeyHeader
 from typing import Annotated
+from domain.entities.models import ErrorResponse
 from settings import settings
 
 
@@ -18,5 +20,10 @@ def get_current_user(token: Annotated[str, Depends(header_scheme)]) -> uuid.UUID
             algorithms=[settings.ALGORITHM],
         )
     except InvalidTokenError:
-        raise HTTPException(status_code=401, detail="Invalid token")
-    return payload.get("user_id")
+        return JSONResponse(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            content=ErrorResponse(
+                errors="Недостаточно средств"
+            ).model_dump()
+        )
+    return uuid.UUID(payload.get("user_id"))

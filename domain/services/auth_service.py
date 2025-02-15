@@ -35,9 +35,12 @@ class AuthService:
     async def login_user(self, username: str, password: str) -> AuthResponse:
         user = await self.user_repo.get_user(username)
         if not user:
-            await self.user_repo.create_user(
+            new_user = await self.user_repo.create_user(
                 username=username,
-                password=self._hash_password(password)
+                password=self._hash_password(password),
+            )
+            return AuthResponse(
+                token=self._generate_jwt(new_user.id),
             )
         elif not self._verify_password(password, user.password):
             raise InvalidCredentials

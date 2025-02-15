@@ -1,23 +1,23 @@
 import uuid
 
 from sqlalchemy import select, update
-from sqlalchemy.ext.asyncio import AsyncSession
 
+from data.db.connection.session import SessionManager
 from data.db.models.user import UserModel
-from domain.entities.models import AuthRequest
 
 
 class UserRepo:
     def __init__(
         self,
-        session: AsyncSession,
+        session_manager: SessionManager,
     ) -> None:
-        self.session = session
+        self.session = session_manager.session
 
     async def create_user(self, username: str, password: str) -> UserModel:
         user_model = UserModel(
             username=username,
             password=password,
+            balance=1000,
         )
         self.session.add(user_model)
         await self.session.commit()
@@ -37,7 +37,6 @@ class UserRepo:
             balance = UserModel.balance - amount
         )
         await self.session.execute(query)
-        await self.session.commit()
 
     async def increment_balance(self, user_id: uuid.UUID, amount: int) -> None:
         query = update(UserModel).where(
@@ -46,7 +45,6 @@ class UserRepo:
             balance = UserModel.balance + amount
         )
         await self.session.execute(query)
-        await self.session.commit()
 
     async def get_balance(self, user_id: uuid.UUID) -> int:
         query = select(UserModel.balance).where(

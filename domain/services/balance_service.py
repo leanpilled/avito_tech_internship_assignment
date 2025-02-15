@@ -14,7 +14,6 @@ class BalanceService:
         user_id: uuid.UUID,
         amount: int,
     ) -> bool:
-        self.user_repo.session.begin()
         current_balance = await self.user_repo.get_balance(user_id)
         if current_balance < amount:
             return False

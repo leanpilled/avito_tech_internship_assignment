@@ -1,8 +1,8 @@
 import uuid
 
 from sqlalchemy import select
-from sqlalchemy.ext.asyncio import AsyncSession
 
+from data.db.connection.session import SessionManager
 from data.db.models.transaction import TransactionModel
 from data.db.models.user import UserModel
 from domain.entities.models import ReceivedCoin, SendCoin
@@ -11,9 +11,9 @@ from domain.entities.models import ReceivedCoin, SendCoin
 class TransactionRepo:
     def __init__(
         self,
-        session: AsyncSession,
+        session_manager: SessionManager,
     ) -> None:
-        self.session = session
+        self.session = session_manager.session
 
     async def create_transaction(
         self,
@@ -27,7 +27,7 @@ class TransactionRepo:
             amount= amount,
         )
         self.session.add(transaction_model)
-        await self.session.commit()
+        await self.session.flush()
         return transaction_model
 
     async def get_incoming_transactions_by_user_id(
@@ -36,7 +36,7 @@ class TransactionRepo:
     ) -> list[ReceivedCoin | None]:
         query = select(
             TransactionModel.amount,
-            UserModel.login,
+            UserModel.username,
         ).join(
             UserModel,
             UserModel.id == TransactionModel.user_from_id,
@@ -51,7 +51,7 @@ class TransactionRepo:
         for row in result:
             incoming_transactions.append(
                 ReceivedCoin(
-                    from_user=row.login,
+                    from_user=row.username,
                     amount=row.amount,
                 )
             )
@@ -64,7 +64,7 @@ class TransactionRepo:
     ) -> list[SendCoin | None]:
         query = select(
             TransactionModel.amount,
-            UserModel.login,
+            UserModel.username,
         ).join(
             UserModel,
             UserModel.id == TransactionModel.user_to_id,
@@ -79,7 +79,7 @@ class TransactionRepo:
         for row in result:
             outgoing_transactions.append(
                 SendCoin(
-                    to_user=row.login,
+                    to_user=row.username,
                     amount=row.amount,
                 )
             )

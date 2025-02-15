@@ -1,5 +1,4 @@
 from fastapi import FastAPI
-import uvicorn as uvicorn
 from aioinject.ext.fastapi import AioInjectMiddleware
 
 from api.auth import router as auth_router
@@ -28,6 +27,5 @@ def create_app() -> FastAPI:
     app.include_router(info_router)
     app.container = container
     return app
-
 
 app = create_app()

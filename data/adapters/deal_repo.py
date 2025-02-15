@@ -1,8 +1,8 @@
 import uuid
 
 from sqlalchemy import select, func
-from sqlalchemy.ext.asyncio import AsyncSession
 
+from data.db.connection.session import SessionManager
 from data.db.models.deal import DealModel
 from data.db.models.item import ItemModel
 from domain.entities.models import Item
@@ -11,9 +11,9 @@ from domain.entities.models import Item
 class DealRepo:
     def __init__(
         self,
-        session: AsyncSession,
+        session_manager: SessionManager,
     ) -> None:
-        self.session = session
+        self.session = session_manager.session
 
     async def create_deal(self, user_id: uuid.UUID, item_id: uuid.UUID) -> DealModel:
         deal_model = DealModel(
@@ -21,7 +21,7 @@ class DealRepo:
             item_id=item_id,
         )
         self.session.add(deal_model)
-        await self.session.commit()
+        await self.session.flush()
         return deal_model
 
     async def get_items_by_user_id(self, user_id: uuid.UUID) -> list[Item | None]:

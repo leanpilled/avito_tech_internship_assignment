@@ -1,18 +1,18 @@
 version: "3.7"
 
 services:
-  app:
-    build: ./
-    environment:
-      DB_HOST: db
-      DB_PORT: 5432
-      DB_USER: avito
-      DB_PASS: avito
-      DB_NAME: avito
-    ports:
-      - 8080:8080
-    depends_on:
-      - db
+  # app:
+  #   build: ./
+  #   environment:
+  #     DB_HOST: localhost
+  #     DB_PORT: 5432
+  #     DB_USER: avito
+  #     DB_PASS: avito
+  #     DB_NAME: avito
+  #   ports:
+  #     - 8080:8080
+  #   depends_on:
+  #     - db
 
   db:
     image: postgres

@@ -1,5 +1,5 @@
-from data.db.connection.session import get_session
-# from domain.services.auth_service import AuthService
+from data.db.connection.session import SessionManager, get_session
+from domain.services.auth_service import AuthService
 from domain.services.balance_service import BalanceService
 from domain.services.deal_service import DealService
 from domain.services.info_service import InfoService
@@ -15,11 +15,12 @@ import aioinject
 container = aioinject.Container()
 container.register(aioinject.Object(Settings()))
 container.register(aioinject.Scoped(get_session))
+container.register(aioinject.Scoped(SessionManager))
 container.register(aioinject.Scoped(DealRepo))
 container.register(aioinject.Scoped(UserRepo))
 container.register(aioinject.Scoped(TransactionRepo))
 container.register(aioinject.Scoped(ItemRepo))
-# container.register(aioinject.Scoped(AuthService))
+container.register(aioinject.Scoped(AuthService))
 container.register(aioinject.Scoped(BalanceService))
 container.register(aioinject.Scoped(DealService))
 container.register(aioinject.Scoped(InfoService))

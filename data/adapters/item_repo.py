@@ -1,6 +1,6 @@
 from sqlalchemy import select
-from sqlalchemy.ext.asyncio import AsyncSession
 
+from data.db.connection.session import SessionManager
 from data.db.models.item import ItemModel
 from domain.entities.models import ItemDto
 
@@ -8,9 +8,9 @@ from domain.entities.models import ItemDto
 class ItemRepo:
     def __init__(
         self,
-        session: AsyncSession,
+        session_manager: SessionManager,
     ) -> None:
-        self.session = session
+        self.session = session_manager.session
 
     async def get_item_by_type(self, item_type: str) -> ItemDto | None:
         query = select(
@@ -19,7 +19,10 @@ class ItemRepo:
             ItemModel.type == item_type
         )
 
-        result = (await self.session.execute(query)).mappings().all()
+        result = (await self.session.execute(query)).scalar_one_or_none()
+
+        if not result:
+            return None
 
         return ItemDto.model_validate(
             result,
