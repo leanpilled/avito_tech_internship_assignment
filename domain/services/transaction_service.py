@@ -30,9 +30,12 @@ class TransactionService:
         to_user_login: str,
         amount: int
     ) -> None:
+<<<<<<< HEAD
         if amount <= 0:
             raise NegativeTransactionAmount
 
+=======
+>>>>>>> 942e3981e5f397d4dd2d7ddc9a126b5c534a83ab
         to_user = await self.user_repo.get_user(to_user_login)
         if not to_user:
             raise UserDoesntExists
