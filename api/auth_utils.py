@@ -1,7 +1,7 @@
 import jwt
 import uuid
 from jwt.exceptions import InvalidTokenError
-from fastapi import HTTPException, Depends, status
+from fastapi import Depends, status
 from fastapi.responses import JSONResponse
 from fastapi.security import APIKeyHeader
 from typing import Annotated
@@ -12,7 +12,7 @@ from settings import settings
 header_scheme = APIKeyHeader(name="Authorization")
 
 
-def get_current_user(token: Annotated[str, Depends(header_scheme)]) -> uuid.UUID:
+def get_current_user(token: Annotated[str, Depends(header_scheme)]) -> uuid.UUID | JSONResponse:
     try:
         payload = jwt.decode(
             token,

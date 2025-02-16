@@ -8,12 +8,12 @@ from data.adapters.user_repo import UserRepo
 from data.adapters.deal_repo import DealRepo
 from data.adapters.transaction_repo import TransactionRepo
 from data.adapters.item_repo import ItemRepo
-from settings import Settings
+from settings import settings
 
 import aioinject
 
 container = aioinject.Container()
-container.register(aioinject.Object(Settings()))
+container.register(aioinject.Object(settings))
 container.register(aioinject.Scoped(get_session))
 container.register(aioinject.Scoped(SessionManager))
 container.register(aioinject.Scoped(DealRepo))

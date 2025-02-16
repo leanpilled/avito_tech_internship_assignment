@@ -25,7 +25,7 @@ class SessionManager:
         session: AsyncSession,
     ):
         self.session = session
-    
+
     def start_transaction(self):
         self.session.begin()
 
