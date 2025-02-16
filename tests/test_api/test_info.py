@@ -1,11 +1,12 @@
-import pytest
 import uuid
+
+import pytest
+from passlib.context import CryptContext
+
 from data.db.models.deal import DealModel
 from data.db.models.item import ItemModel
 from data.db.models.transaction import TransactionModel
 from data.db.models.user import UserModel
-from passlib.context import CryptContext
-
 from domain.entities.models import (
     CoinHistory,
     InfoResponse,

@@ -1,6 +1,7 @@
 import uuid
 
 from sqlalchemy.orm import Mapped, mapped_column
+
 from data.db.connection.session import Base
 
 

@@ -1,9 +1,10 @@
 import pytest
-from sqlalchemy import select, and_
+from passlib.context import CryptContext
+from sqlalchemy import and_, select
+
+from data.db.models.transaction import TransactionModel
 from data.db.models.user import UserModel
 from domain.entities.models import SendCoinRequest
-from passlib.context import CryptContext
-from data.db.models.transaction import TransactionModel
 from tests.conftest import CurrentUser
 
 

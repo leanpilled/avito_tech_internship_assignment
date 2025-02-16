@@ -1,8 +1,8 @@
 import uuid
 
 from data.adapters.deal_repo import DealRepo
-from data.adapters.user_repo import UserRepo
 from data.adapters.transaction_repo import TransactionRepo
+from data.adapters.user_repo import UserRepo
 from domain.entities.models import CoinHistory, InfoResponse
 
 

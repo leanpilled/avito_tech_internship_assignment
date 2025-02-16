@@ -1,6 +1,6 @@
 import unittest
-from unittest.mock import AsyncMock
 import uuid
+from unittest.mock import AsyncMock
 
 from data.adapters.deal_repo import DealRepo
 from data.adapters.transaction_repo import TransactionRepo

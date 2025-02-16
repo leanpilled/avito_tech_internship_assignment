@@ -1,6 +1,6 @@
 import unittest
-from unittest.mock import AsyncMock, MagicMock
 import uuid
+from unittest.mock import AsyncMock, MagicMock
 
 from data.adapters.deal_repo import DealRepo
 from data.adapters.item_repo import ItemRepo

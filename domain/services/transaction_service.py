@@ -1,17 +1,16 @@
 import uuid
 
-from data.adapters.user_repo import UserRepo
 from data.adapters.item_repo import ItemRepo
 from data.adapters.transaction_repo import TransactionRepo
+from data.adapters.user_repo import UserRepo
 from data.db.connection.session import SessionManager
-from domain.services.balance_service import BalanceService
-
 from domain.exceptions import (
     IncorrectReceiverCredential,
     InsufficientFunds,
-    UserDoesntExists,
     NegativeTransactionAmount,
+    UserDoesntExists,
 )
+from domain.services.balance_service import BalanceService
 
 
 class TransactionService:

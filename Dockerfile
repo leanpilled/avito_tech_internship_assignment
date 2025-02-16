@@ -10,4 +10,4 @@ RUN pip3 install uv
 RUN uv sync --frozen
 ADD . /auth
 
-CMD [ "uv", "run", "fastapi", "dev", "main.py", "--host", "0.0.0.0", "--port", "8080"]
+CMD [ "uv", "run", "fastapi", "run", "--workers", "6", "main.py", "--host", "0.0.0.0", "--port", "8080"]

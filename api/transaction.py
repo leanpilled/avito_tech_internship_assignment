@@ -1,7 +1,11 @@
 import uuid
 
+from aioinject import Injected
+from aioinject.ext.fastapi import inject
 from fastapi import APIRouter, Depends, status
 from fastapi.responses import JSONResponse
+
+from api.auth_utils import get_current_user
 from api.base_responses import BASE_RESPONSES
 from domain.entities.models import ErrorResponse, SendCoinRequest
 from domain.exceptions import (
@@ -10,11 +14,7 @@ from domain.exceptions import (
     NegativeTransactionAmount,
     UserDoesntExists,
 )
-
-from aioinject import Injected
-from aioinject.ext.fastapi import inject
 from domain.services.transaction_service import TransactionService
-from api.auth_utils import get_current_user
 
 router = APIRouter(tags=["transaction"])
 

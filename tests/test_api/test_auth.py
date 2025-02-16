@@ -1,10 +1,12 @@
-import pytest
-from domain.entities.models import AuthRequest
-from sqlalchemy import select
-from data.db.models.user import UserModel
-from api.auth_utils import get_current_user
-from passlib.context import CryptContext
 from enum import StrEnum
+
+import pytest
+from passlib.context import CryptContext
+from sqlalchemy import select
+
+from api.auth_utils import get_current_user
+from data.db.models.user import UserModel
+from domain.entities.models import AuthRequest
 
 
 class User(StrEnum):

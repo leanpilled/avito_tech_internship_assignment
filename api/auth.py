@@ -1,11 +1,11 @@
+from aioinject import Injected
+from aioinject.ext.fastapi import inject
 from fastapi import APIRouter, status
 from fastapi.responses import JSONResponse
+
 from api.base_responses import BASE_RESPONSES
 from domain.entities.models import AuthRequest, AuthResponse, ErrorResponse
 from domain.exceptions import InvalidCredentials
-
-from aioinject import Injected
-from aioinject.ext.fastapi import inject
 from domain.services.auth_service import AuthService
 
 router = APIRouter(prefix="/auth", tags=["auth"])

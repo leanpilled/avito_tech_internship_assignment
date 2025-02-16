@@ -1,17 +1,16 @@
-import pytest
-from sqlalchemy import select
-from sqlalchemy.ext.asyncio import AsyncSession
-
 from typing import AsyncIterator
-from sqlalchemy.ext.asyncio import create_async_engine
+
+import pytest
+from fastapi.testclient import TestClient
+from passlib.context import CryptContext
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
+
 from api.auth_utils import get_current_user
 from data.db.models.user import UserModel
-from settings import settings
-from passlib.context import CryptContext
-
-from fastapi.testclient import TestClient
 from main import app
+from settings import settings
 
 
 class CurrentUser:

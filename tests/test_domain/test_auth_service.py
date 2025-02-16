@@ -1,7 +1,8 @@
 import unittest
-from unittest.mock import AsyncMock, MagicMock
 import uuid
 from datetime import datetime, timezone
+from unittest.mock import AsyncMock, MagicMock
+
 import jwt
 
 from data.adapters.user_repo import UserRepo

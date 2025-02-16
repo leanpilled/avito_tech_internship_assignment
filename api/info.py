@@ -1,13 +1,13 @@
 import uuid
 
-from fastapi import APIRouter, Depends
-from api.base_responses import BASE_RESPONSES
-from domain.entities.models import InfoResponse
-
 from aioinject import Injected
 from aioinject.ext.fastapi import inject
-from domain.services.info_service import InfoService
+from fastapi import APIRouter, Depends
+
 from api.auth_utils import get_current_user
+from api.base_responses import BASE_RESPONSES
+from domain.entities.models import InfoResponse
+from domain.services.info_service import InfoService
 
 router = APIRouter(prefix="/info", tags=["info"])
 

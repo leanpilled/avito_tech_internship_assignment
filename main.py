@@ -1,12 +1,12 @@
-from fastapi import FastAPI
 from aioinject.ext.fastapi import AioInjectMiddleware
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from api.auth import router as auth_router
-from api.transaction import router as transaction_router
 from api.deal import router as deal_router
 from api.info import router as info_router
+from api.transaction import router as transaction_router
 from di.container import container
-from fastapi.middleware.cors import CORSMiddleware
 
 
 def create_app() -> FastAPI:

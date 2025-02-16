@@ -1,11 +1,13 @@
+import uuid
+from datetime import UTC, datetime, timedelta
+
 import jwt
 from passlib.context import CryptContext
-from datetime import datetime, timedelta, UTC
-import uuid
-from domain.exceptions import InvalidCredentials
-from settings import Settings
+
 from data.adapters.user_repo import UserRepo
 from domain.entities.models import AuthResponse
+from domain.exceptions import InvalidCredentials
+from settings import Settings
 
 
 class AuthService:

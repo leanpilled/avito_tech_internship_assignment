@@ -1,16 +1,15 @@
 import uuid
 
+from aioinject import Injected
+from aioinject.ext.fastapi import inject
 from fastapi import APIRouter, Depends, status
 from fastapi.responses import JSONResponse
+
+from api.auth_utils import get_current_user
 from api.base_responses import BASE_RESPONSES
 from domain.entities.models import ErrorResponse
 from domain.exceptions import InsufficientFunds, ItemDoesntExists
-
-from aioinject import Injected
-from aioinject.ext.fastapi import inject
 from domain.services.deal_service import DealService
-
-from api.auth_utils import get_current_user
 
 router = APIRouter(prefix="/buy", tags=["deal"])
 

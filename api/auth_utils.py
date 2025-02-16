@@ -1,13 +1,14 @@
-import jwt
 import uuid
-from jwt.exceptions import InvalidTokenError
+from typing import Annotated
+
+import jwt
 from fastapi import Depends, status
 from fastapi.responses import JSONResponse
 from fastapi.security import APIKeyHeader
-from typing import Annotated
+from jwt.exceptions import InvalidTokenError
+
 from domain.entities.models import ErrorResponse
 from settings import settings
-
 
 header_scheme = APIKeyHeader(name="Authorization")
 

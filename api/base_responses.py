@@ -1,6 +1,5 @@
 from domain.entities.models import ErrorResponse
 
-
 BASE_RESPONSES = {
     200: {
         "description": "Успешный ответ",

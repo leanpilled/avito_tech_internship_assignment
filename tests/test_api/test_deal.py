@@ -1,5 +1,6 @@
 import pytest
-from sqlalchemy import select, and_
+from sqlalchemy import and_, select
+
 from data.db.models.deal import DealModel
 from data.db.models.item import ItemModel
 

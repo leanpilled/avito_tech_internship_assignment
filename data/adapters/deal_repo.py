@@ -1,6 +1,6 @@
 import uuid
 
-from sqlalchemy import select, func
+from sqlalchemy import func, select
 
 from data.db.connection.session import SessionManager
 from data.db.models.deal import DealModel

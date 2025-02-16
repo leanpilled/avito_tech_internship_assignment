@@ -1,6 +1,6 @@
 import unittest
-from unittest.mock import AsyncMock
 import uuid
+from unittest.mock import AsyncMock
 
 from data.adapters.user_repo import UserRepo
 from domain.services.balance_service import BalanceService

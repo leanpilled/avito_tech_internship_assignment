@@ -1,12 +1,11 @@
 import uuid
 
-from data.adapters.user_repo import UserRepo
 from data.adapters.deal_repo import DealRepo
 from data.adapters.item_repo import ItemRepo
+from data.adapters.user_repo import UserRepo
 from data.db.connection.session import SessionManager
-from domain.services.balance_service import BalanceService
-
 from domain.exceptions import InsufficientFunds, ItemDoesntExists
+from domain.services.balance_service import BalanceService
 
 
 class DealService:
