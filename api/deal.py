@@ -14,6 +14,7 @@ from api.auth_utils import get_current_user
 
 router = APIRouter(prefix="/buy", tags=["deal"])
 
+
 @router.get(
     "/{item}",
     summary="Купить предмет за монеты.",
@@ -29,15 +30,11 @@ async def buy_item(
         await deal_service.conduct_deal(user_id, item)
     except InsufficientFunds:
         return JSONResponse(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            content=ErrorResponse(
-                errors="Недостаточно средств"
-            ).model_dump()
+            status_code=status.HTTP_400_BAD_REQUEST,
+            content=ErrorResponse(errors="Недостаточно средств").model_dump(),
         )
     except ItemDoesntExists:
         return JSONResponse(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            content=ErrorResponse(
-                errors="Такого товара не сущетсвует"
-            ).model_dump()
+            content=ErrorResponse(errors="Такого товара не сущетсвует").model_dump(),
         )

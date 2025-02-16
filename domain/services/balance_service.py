@@ -3,10 +3,7 @@ from data.adapters.user_repo import UserRepo
 
 
 class BalanceService:
-    def __init__(
-        self,
-        user_repo: UserRepo
-    ) -> None:
+    def __init__(self, user_repo: UserRepo) -> None:
         self.user_repo = user_repo
 
     async def can_afford(

@@ -12,7 +12,9 @@ from settings import settings
 header_scheme = APIKeyHeader(name="Authorization")
 
 
-def get_current_user(token: Annotated[str, Depends(header_scheme)]) -> uuid.UUID | JSONResponse:
+def get_current_user(
+    token: Annotated[str, Depends(header_scheme)],
+) -> uuid.UUID | JSONResponse:
     try:
         payload = jwt.decode(
             token,
@@ -22,8 +24,6 @@ def get_current_user(token: Annotated[str, Depends(header_scheme)]) -> uuid.UUID
     except InvalidTokenError:
         return JSONResponse(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            content=ErrorResponse(
-                errors="Недостаточно средств"
-            ).model_dump()
+            content=ErrorResponse(errors="Неавторизован").model_dump(),
         )
     return uuid.UUID(payload.get("user_id"))

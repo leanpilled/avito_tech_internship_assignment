@@ -24,31 +24,27 @@ class UserRepo:
         return user_model
 
     async def get_user(self, username: str) -> UserModel | None:
-        query = select(UserModel).where(
-            UserModel.username == username
-        )
+        query = select(UserModel).where(UserModel.username == username)
         result = await self.session.execute(query)
         return result.scalar_one_or_none()
 
     async def subtract_balance(self, user_id: uuid.UUID, amount: int) -> None:
-        query = update(UserModel).where(
-            UserModel.id == user_id
-        ).values(
-            balance = UserModel.balance - amount
+        query = (
+            update(UserModel)
+            .where(UserModel.id == user_id)
+            .values(balance=UserModel.balance - amount)
         )
         await self.session.execute(query)
 
     async def increment_balance(self, user_id: uuid.UUID, amount: int) -> None:
-        query = update(UserModel).where(
-            UserModel.id == user_id
-        ).values(
-            balance = UserModel.balance + amount
+        query = (
+            update(UserModel)
+            .where(UserModel.id == user_id)
+            .values(balance=UserModel.balance + amount)
         )
         await self.session.execute(query)
 
     async def get_balance(self, user_id: uuid.UUID) -> int:
-        query = select(UserModel.balance).where(
-            UserModel.id == user_id
-        )
+        query = select(UserModel.balance).where(UserModel.id == user_id)
         result = await self.session.execute(query)
         return result.scalar_one()

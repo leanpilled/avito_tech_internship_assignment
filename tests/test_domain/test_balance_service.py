@@ -18,7 +18,9 @@ class TestBalanceService(unittest.IsolatedAsyncioTestCase):
     async def test_can_afford(self):
         self.mock_user_repo.get_balance.return_value = self.balance
 
-        result = await self.balance_service.can_afford(self.user_id, self.affordable_amount)
+        result = await self.balance_service.can_afford(
+            self.user_id, self.affordable_amount
+        )
         self.mock_user_repo.get_balance.assert_called_once_with(self.user_id)
         self.assertTrue(result)
 
@@ -26,14 +28,24 @@ class TestBalanceService(unittest.IsolatedAsyncioTestCase):
         self.assertFalse(result)
 
     async def test_conduct_deal_payment(self):
-        await self.balance_service.conduct_deal_payment(self.user_id, self.affordable_amount)
-        self.mock_user_repo.subtract_balance.assert_called_once_with(self.user_id, self.affordable_amount)
+        await self.balance_service.conduct_deal_payment(
+            self.user_id, self.affordable_amount
+        )
+        self.mock_user_repo.subtract_balance.assert_called_once_with(
+            self.user_id, self.affordable_amount
+        )
 
     async def test_conduct_transaction_fund_transfer(self):
         from_user = uuid.uuid4()
         to_user = uuid.uuid4()
 
-        await self.balance_service.conduct_transaction_fund_transfer(from_user, to_user, self.affordable_amount)
+        await self.balance_service.conduct_transaction_fund_transfer(
+            from_user, to_user, self.affordable_amount
+        )
 
-        self.mock_user_repo.subtract_balance.assert_called_once_with(from_user, self.affordable_amount)
-        self.mock_user_repo.increment_balance.assert_called_once_with(to_user, self.affordable_amount)
+        self.mock_user_repo.subtract_balance.assert_called_once_with(
+            from_user, self.affordable_amount
+        )
+        self.mock_user_repo.increment_balance.assert_called_once_with(
+            to_user, self.affordable_amount
+        )

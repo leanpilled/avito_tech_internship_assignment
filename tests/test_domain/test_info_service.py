@@ -32,10 +32,7 @@ class TestInfoService(unittest.IsolatedAsyncioTestCase):
             ),
         ]
         self.send_coins = [
-            SendCoin(
-                to_user="user1",
-                amount=100
-            ),
+            SendCoin(to_user="user1", amount=100),
             SendCoin(
                 to_user="user2",
                 amount=1000,
@@ -50,15 +47,23 @@ class TestInfoService(unittest.IsolatedAsyncioTestCase):
 
     async def test_get_info(self):
         self.mock_user_repo.get_balance.return_value = self.balance
-        self.mock_transaction_repo.get_incoming_transactions_by_user_id.return_value = self.received_coins
-        self.mock_transaction_repo.get_outgoing_transactions_by_user_id.return_value = self.send_coins
+        self.mock_transaction_repo.get_incoming_transactions_by_user_id.return_value = (
+            self.received_coins
+        )
+        self.mock_transaction_repo.get_outgoing_transactions_by_user_id.return_value = (
+            self.send_coins
+        )
         self.mock_deal_repo.get_items_by_user_id.return_value = self.inventory
 
         response = await self.info_service.get_info(self.user_id)
 
         self.mock_user_repo.get_balance.assert_called_once_with(self.user_id)
-        self.mock_transaction_repo.get_incoming_transactions_by_user_id.assert_called_once_with(self.user_id)
-        self.mock_transaction_repo.get_outgoing_transactions_by_user_id.assert_called_once_with(self.user_id)
+        self.mock_transaction_repo.get_incoming_transactions_by_user_id.assert_called_once_with(
+            self.user_id
+        )
+        self.mock_transaction_repo.get_outgoing_transactions_by_user_id.assert_called_once_with(
+            self.user_id
+        )
         self.mock_deal_repo.get_items_by_user_id.assert_called_once_with(self.user_id)
 
         self.assertIsInstance(response, InfoResponse)

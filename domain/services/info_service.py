@@ -22,8 +22,12 @@ class InfoService:
         user_id: uuid.UUID,
     ) -> InfoResponse:
         balance = await self.user_repo.get_balance(user_id)
-        received_coins = await self.transaction_repo.get_incoming_transactions_by_user_id(user_id)
-        send_coins = await self.transaction_repo.get_outgoing_transactions_by_user_id(user_id)
+        received_coins = (
+            await self.transaction_repo.get_incoming_transactions_by_user_id(user_id)
+        )
+        send_coins = await self.transaction_repo.get_outgoing_transactions_by_user_id(
+            user_id
+        )
         inventory = await self.deal_repo.get_items_by_user_id(user_id)
         return InfoResponse(
             coins=balance,

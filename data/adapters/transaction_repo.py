@@ -16,33 +16,29 @@ class TransactionRepo:
         self.session = session_manager.session
 
     async def create_transaction(
-        self,
-        from_user: uuid.UUID,
-        to_user: uuid.UUID,
-        amount: int
+        self, from_user: uuid.UUID, to_user: uuid.UUID, amount: int
     ) -> TransactionModel:
         transaction_model = TransactionModel(
             user_from_id=from_user,
             user_to_id=to_user,
-            amount= amount,
+            amount=amount,
         )
         self.session.add(transaction_model)
         await self.session.flush()
         return transaction_model
 
     async def get_incoming_transactions_by_user_id(
-        self,
-        user_id: uuid.UUID
+        self, user_id: uuid.UUID
     ) -> list[ReceivedCoin | None]:
-        query = select(
-            TransactionModel.amount,
-            UserModel.username,
-        ).join(
-            UserModel,
-            UserModel.id == TransactionModel.user_from_id,
-            isouter=True
-        ).where(
-            TransactionModel.user_to_id == user_id
+        query = (
+            select(
+                TransactionModel.amount,
+                UserModel.username,
+            )
+            .join(
+                UserModel, UserModel.id == TransactionModel.user_from_id, isouter=True
+            )
+            .where(TransactionModel.user_to_id == user_id)
         )
 
         result = (await self.session.execute(query)).mappings().all()
@@ -59,18 +55,15 @@ class TransactionRepo:
         return incoming_transactions
 
     async def get_outgoing_transactions_by_user_id(
-        self,
-        user_id: uuid.UUID
+        self, user_id: uuid.UUID
     ) -> list[SendCoin | None]:
-        query = select(
-            TransactionModel.amount,
-            UserModel.username,
-        ).join(
-            UserModel,
-            UserModel.id == TransactionModel.user_to_id,
-            isouter=True
-        ).where(
-            TransactionModel.user_from_id == user_id
+        query = (
+            select(
+                TransactionModel.amount,
+                UserModel.username,
+            )
+            .join(UserModel, UserModel.id == TransactionModel.user_to_id, isouter=True)
+            .where(TransactionModel.user_from_id == user_id)
         )
 
         result = (await self.session.execute(query)).mappings().all()

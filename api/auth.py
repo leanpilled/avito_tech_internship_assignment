@@ -10,6 +10,7 @@ from domain.services.auth_service import AuthService
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
+
 @router.post(
     "/",
     summary="Аутентификация и получение JWT-токена.",
@@ -22,7 +23,7 @@ router = APIRouter(prefix="/auth", tags=["auth"])
         409: {
             "description": "Конфликт.",
             "model": ErrorResponse,
-        }
+        },
     },
 )
 @inject
@@ -38,7 +39,5 @@ async def login_user(
     except InvalidCredentials:
         return JSONResponse(
             status_code=status.HTTP_409_CONFLICT,
-            content=ErrorResponse(
-                errors="Неверный логин или пароль."
-            ).model_dump()
+            content=ErrorResponse(errors="Неверный логин или пароль.").model_dump(),
         )

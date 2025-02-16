@@ -1,52 +1,75 @@
 import pytest
-from fastapi.testclient import TestClient
-from sqlalchemy.ext.asyncio import AsyncSession
-
 from domain.entities.models import AuthRequest
-from main import app
-
-pytestmark = [pytest.mark.asyncio]
-from typing import AsyncIterator
-
 from sqlalchemy import select
-
-# from data.db.connection.session import async_session_maker, get_session
-from sqlalchemy.ext.asyncio import create_async_engine
-from sqlalchemy.orm import sessionmaker
-
 from data.db.models.user import UserModel
-from settings import settings
+from api.auth_utils import get_current_user
+from passlib.context import CryptContext
+from enum import StrEnum
+
+
+class User(StrEnum):
+    USERNAME = "USERNAME11"
+    PASSWORD = "PASSWORD"
+    WRONG_PASSWORD = "WRONG_PASSWORD"
 
 
 @pytest.fixture
-async def get_session() -> AsyncIterator[AsyncSession]:
-    engine = create_async_engine(settings.DATABASE_URL)
-
-    async_session_maker = sessionmaker(
-        engine,
-        class_=AsyncSession,
-        expire_on_commit=False,
+async def get_existing_user(session):
+    pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+    user = UserModel(
+        username=User.USERNAME,
+        password=pwd_context.hash(User.PASSWORD),
+        balance=1000,
     )
-    async with async_session_maker() as session:
-        yield session
+    session.add(user)
+    await session.commit()
+    yield user
+    await session.delete(user)
+    await session.commit()
 
-client = TestClient(app)
 
 @pytest.mark.asyncio
-async def test_auth(get_session):
+async def test_login_existing_user(client, get_existing_user):
+    user = get_existing_user
     response = client.post(
         "/auth/",
         json=AuthRequest(
-            username="zaza190",
-            password="zaza190",
-        ).model_dump()
+            username=User.USERNAME,
+            password=User.PASSWORD,
+        ).model_dump(),
     )
+    assert response.status_code == 200
+    assert user.id == get_current_user(response.json()["token"])
 
-    query = select(UserModel).where(
-        UserModel.username == "zaza190"
+
+@pytest.mark.asyncio
+async def test_login_non_existing_user(client, session):
+    response = client.post(
+        "/auth/",
+        json=AuthRequest(
+            username=User.USERNAME,
+            password=User.PASSWORD,
+        ).model_dump(),
     )
-    result = await get_session.execute(query)
+    assert response.status_code == 200
+
+    query = select(UserModel).where(UserModel.username == User.USERNAME)
+    result = await session.execute(query)
     user = result.scalar_one_or_none()
 
-    assert user
-    assert response.status_code == 200
+    assert user.id == get_current_user(response.json()["token"])
+
+    await session.delete(user)
+    await session.commit()
+
+
+@pytest.mark.asyncio
+async def test_login_wrong_credentials(client, get_existing_user):
+    response = client.post(
+        "/auth/",
+        json=AuthRequest(
+            username=User.USERNAME,
+            password=User.WRONG_PASSWORD,
+        ).model_dump(),
+    )
+    assert response.status_code == 409

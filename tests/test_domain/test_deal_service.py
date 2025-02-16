@@ -10,6 +10,7 @@ from domain.exceptions import InsufficientFunds, ItemDoesntExists
 from domain.services.balance_service import BalanceService
 from domain.services.deal_service import DealService
 
+
 class TestDealService(unittest.IsolatedAsyncioTestCase):
     def setUp(self):
         self.mock_deal_repo = AsyncMock(spec=DealRepo)
@@ -39,9 +40,13 @@ class TestDealService(unittest.IsolatedAsyncioTestCase):
 
         self.mock_item_repo.get_item_by_type.assert_called_once_with(item_type)
         self.mock_session_manager.start_transaction.assert_called_once()
-        self.mock_balance_service.can_afford.assert_called_once_with(self.user_id, item.price)
+        self.mock_balance_service.can_afford.assert_called_once_with(
+            self.user_id, item.price
+        )
         self.mock_deal_repo.create_deal.assert_called_once_with(self.user_id, item.id)
-        self.mock_balance_service.conduct_deal_payment.assert_called_once_with(self.user_id, item.price)
+        self.mock_balance_service.conduct_deal_payment.assert_called_once_with(
+            self.user_id, item.price
+        )
         self.mock_session_manager.commit_transaction.assert_called_once()
 
     async def test_conduct_deal_insufficient_funds(self):

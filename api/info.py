@@ -11,6 +11,7 @@ from api.auth_utils import get_current_user
 
 router = APIRouter(prefix="/info", tags=["info"])
 
+
 @router.get(
     "/",
     summary="Получить информацию о монетах, инвентаре и истории транзакций.",

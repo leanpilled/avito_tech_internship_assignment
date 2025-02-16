@@ -14,10 +14,12 @@ async_session_maker = sessionmaker(
     expire_on_commit=False,
 )
 
+
 @asynccontextmanager
 async def get_session() -> AsyncIterator[AsyncSession]:
     async with async_session_maker() as session:
         yield session
+
 
 class SessionManager:
     def __init__(
@@ -34,6 +36,7 @@ class SessionManager:
 
     async def rollback_transaction(self):
         await self.session.rollback()
+
 
 class Base(DeclarativeBase):
     pass

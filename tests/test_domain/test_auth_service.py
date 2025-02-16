@@ -10,6 +10,7 @@ from domain.exceptions import InvalidCredentials
 from domain.services.auth_service import AuthService
 from settings import settings
 
+
 class TestAuthService(unittest.IsolatedAsyncioTestCase):
     def setUp(self):
         self.settings = settings
@@ -26,18 +27,29 @@ class TestAuthService(unittest.IsolatedAsyncioTestCase):
 
     def test_hash_password(self):
         hashed_password = self.auth_service._hash_password(self.password)
-        self.assertTrue(self.auth_service._verify_password(self.password, hashed_password))
+        self.assertTrue(
+            self.auth_service._verify_password(self.password, hashed_password)
+        )
 
     def test_verify_password(self):
         hashed_password = self.auth_service._hash_password(self.password)
-        self.assertTrue(self.auth_service._verify_password(self.password, hashed_password))
-        self.assertFalse(self.auth_service._verify_password(self.wrong_password, hashed_password))
+        self.assertTrue(
+            self.auth_service._verify_password(self.password, hashed_password)
+        )
+        self.assertFalse(
+            self.auth_service._verify_password(self.wrong_password, hashed_password)
+        )
 
     def test_generate_jwt(self):
         token = self.auth_service._generate_jwt(self.user_id)
-        decoded = jwt.decode(token, self.settings.SECRET_KEY, algorithms=[self.settings.ALGORITHM])
+        decoded = jwt.decode(
+            token, self.settings.SECRET_KEY, algorithms=[self.settings.ALGORITHM]
+        )
         self.assertEqual(decoded["user_id"], str(self.user_id))
-        self.assertTrue(datetime.fromtimestamp(decoded["exp"], tz=timezone.utc) > datetime.now(timezone.utc))
+        self.assertTrue(
+            datetime.fromtimestamp(decoded["exp"], tz=timezone.utc)
+            > datetime.now(timezone.utc)
+        )
 
     async def test_login_user_existing_user(self):
         hashed_password = self.auth_service._hash_password(self.password)
@@ -50,7 +62,13 @@ class TestAuthService(unittest.IsolatedAsyncioTestCase):
 
         self.mock_user_repo.get_user.assert_called_once_with(self.test_user)
         self.assertIsInstance(response, AuthResponse)
-        self.assertTrue(jwt.decode(response.token, self.settings.SECRET_KEY, algorithms=[self.settings.ALGORITHM]))
+        self.assertTrue(
+            jwt.decode(
+                response.token,
+                self.settings.SECRET_KEY,
+                algorithms=[self.settings.ALGORITHM],
+            )
+        )
 
     async def test_login_user_create_new_user(self):
         new_user = MagicMock()
@@ -64,7 +82,13 @@ class TestAuthService(unittest.IsolatedAsyncioTestCase):
         self.mock_user_repo.get_user.assert_called_once_with(self.test_user)
         self.mock_user_repo.create_user.assert_called_once()
         self.assertIsInstance(response, AuthResponse)
-        self.assertTrue(jwt.decode(response.token, self.settings.SECRET_KEY, algorithms=[self.settings.ALGORITHM]))
+        self.assertTrue(
+            jwt.decode(
+                response.token,
+                self.settings.SECRET_KEY,
+                algorithms=[self.settings.ALGORITHM],
+            )
+        )
 
     async def test_login_user_invalid_password(self):
         mock_user = MagicMock()

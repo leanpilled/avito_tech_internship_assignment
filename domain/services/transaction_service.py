@@ -6,7 +6,12 @@ from data.adapters.transaction_repo import TransactionRepo
 from data.db.connection.session import SessionManager
 from domain.services.balance_service import BalanceService
 
-from domain.exceptions import IncorrectReceiverCredential, InsufficientFunds, UserDoesntExists, NegativeTransactionAmount
+from domain.exceptions import (
+    IncorrectReceiverCredential,
+    InsufficientFunds,
+    UserDoesntExists,
+    NegativeTransactionAmount,
+)
 
 
 class TransactionService:
@@ -25,10 +30,7 @@ class TransactionService:
         self.session_manager = session_manager
 
     async def conduct_transaction(
-        self,
-        from_user_id: uuid.UUID,
-        to_user_login: str,
-        amount: int
+        self, from_user_id: uuid.UUID, to_user_login: str, amount: int
     ) -> None:
         if amount <= 0:
             raise NegativeTransactionAmount
