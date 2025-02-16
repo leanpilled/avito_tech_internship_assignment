@@ -9,7 +9,7 @@ from tests.conftest import CurrentUser
 
 
 class TestVariables:
-    USERNAME = "USERNAME101111"
+    USERNAME = "USERNAME"
     NON_EXISTING_USERNAME = "NON_EXISTING_USERNAME"
     PASSWORD = "PASSWORD"
     BALANCE = 1000

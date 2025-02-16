@@ -10,7 +10,7 @@ from domain.entities.models import AuthRequest
 
 
 class User(StrEnum):
-    USERNAME = "USERNAME11"
+    USERNAME = "USERNAME"
     PASSWORD = "PASSWORD"
     WRONG_PASSWORD = "WRONG_PASSWORD"
 
